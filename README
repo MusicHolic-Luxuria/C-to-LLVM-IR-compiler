@@ -1,0 +1,43 @@
+直接在終端機中執行下 make 指令即可
+下完 make 指令，它將會自動編譯所需的檔案 包含我所創立的三個 input 檔 (myInput1.c, myInput2.c, myInput3.c)
+
+make 為以下所述的部份
+1. 編譯 .g 檔
+	java -cp antlr-3.5.2-complete-no-st3.jar org.antlr.Tool myInterp.g
+ 
+2. 編譯 .java 檔
+	javac -cp ./antlr-3.5.2-complete-no-st3.jar myInterp_test.java  myInterpLexer.java myInterpParser.java
+	
+3. 產生 .ll 檔
+    java -cp ./antlr-3.5.2-complete-no-st3.jar:. myCompiler_test myInput1.c > myInput1.ll
+	java -cp ./antlr-3.5.2-complete-no-st3.jar:. myCompiler_test myInput2.c > myInput2.ll
+	java -cp ./antlr-3.5.2-complete-no-st3.jar:. myCompiler_test myInput3.c > myInput3.ll
+
+4. 編譯 .ll 檔, 產生 .s 檔
+    llc myInput1.ll
+	llc myInput2.ll
+	llc myInput3.ll
+
+5. 編譯 .s 檔
+    gcc -static myInput1.s -o myInput1.exe
+	gcc -static myInput2.s -o myInput2.exe
+	gcc -static myInput3.s -o myInput3.exe
+	
+6.執行(為了使每個檔案的結果分開，在檔案要開始執行前須按 enter)
+	@read -p "press enter to execute next program(myInput1.exe)" trash
+	@echo "execute myInput1.exe"
+	./myInput1.exe &
+	
+	@read -p "press enter to execute next program(myInput2.exe)" trash
+	@echo "execute myInput2.exe"
+	./myInput2.exe &
+	
+	@read -p "press enter to execute next program(myInput3.exe)" trash
+	@echo "execute myInput3.exe"
+	./myInput3.exe &
+	
+	@read -p "press enter to end Makefile" trash
+	
+可以輸入 make clean 恢復原狀
+
+可以輸入 make clang 觀察標準的 .ll 檔 
